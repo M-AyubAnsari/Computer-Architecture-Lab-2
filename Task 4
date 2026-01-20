@@ -1,0 +1,31 @@
+.text
+.globl main
+main:
+    li x5, 2 # a = 2
+    li x6, 3 # b = 3
+    li x7, 0 # i = 0
+    li x10, 0x100 # adress of array D
+
+
+    Outerloop:
+        blt x7, x5, Startinner # checks if i < a
+        bge x0, x0, End  # jumps to end
+    
+    Startinner:
+        li x29, 0 # j = 0
+    
+    Innerloop:
+        blt x29, x6 Inloopcom # checks if j < b, if 
+        addi x7, x7, 1 # increments i++
+        bge x0, x0, Outerloop # jumps to outerloop
+    
+    Inloopcom:
+        li x30, 16 # stores offset byte 16 to temp reg
+        mul x31, x29, x30 # multiplies 16 by j to store final offset value
+        add x30, x10, x31 # adds offset to adress to store final adress
+        add x31, x7, x29 # i + j
+        sw x31, 0(x30) # stores result of i + j to final adress
+        addi x29, x29, 1 # increments j++
+        bge x0, x0, Innerloop #jumps to innerloop
+    
+    End:
