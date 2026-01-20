@@ -1,0 +1,46 @@
+.text
+.globl main
+main:
+    li x5, 0x200 # x5 is the base address of array a at 0x200.
+    li x22, 0    # i = 0 at register 22
+    li x23, 0    # sum = 0 at register 23
+    li x24, 10   # Creating a value for compare in a temporary register.
+
+
+L1:                        # Filling the array, a[i] = i
+        beq x22, x24, END1  # If i == 10, then go to to end
+        j  ELSE1           # Otherwise continue towards the else part
+
+
+ELSE1:
+        slli x6, x22, 2     # x6 = i * 4
+        add  x7, x5, x6     # x7 = address of a[i]
+        sw   x22, 0(x7)     # Storing 4 byte integer, store values into memory address
+        addi x22, x22, 1    # incrementing i after every loop
+        j L1
+
+
+END1:
+        li  x22, 0          # Resetting i and sum to 0 after each loop to allow for second loop summing
+        li  x23, 0          
+
+
+L2:
+        beq x22, x24, END2   # If i == 10, then go to to end
+        j  ELSE2            # Otherwise continue towards the else part
+
+
+ELSE2:                      # Summing up the values, Sum = Sum + a[i]
+        slli x6, x22, 2     # x6 = i * 4
+        add  x7, x5, x6     # x7 = address of a[i]
+        lw   x6, 0(x7)      # x6 = a[i], load values from memory address
+        add  x23, x23, x6   # Summing up the values stored in the array after eery loop
+        addi x22, x22, 1    # incrementing i after every loop.
+        j L2
+
+
+END2:
+
+
+end:
+    j end
